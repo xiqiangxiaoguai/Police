@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Police</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string name="camera">照相机</string>
+    <string name="video">摄像机</string>
+    <string name="record">录音机</string>
+    <string name="files">文件</string>
+    <string name="setting">设置</string>
+    <string name="wireless">一键传输</string>
+    <string name="back">返回</string>
+    <string name="storage_no_enough">存储空间不足,拍摄失败!</string>
+</resources>
