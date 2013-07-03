@@ -10,7 +10,14 @@ import com.phoenix.data.Constants;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
@@ -44,6 +51,7 @@ public class CameraActivity extends Activity {
 	private boolean cameraBusy = false;
 	private int cFlashMode = CameraSurfaceView.FLASH_MODE_AUTO;
 	private String cameraPath = "/sdcard/police/camera/";
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	private AutoFocusCallback autoFocus = new AutoFocusCallback() {
 		
@@ -136,12 +144,11 @@ public class CameraActivity extends Activity {
 	private String save(byte[] data){
 		if (LOG_SWITCH)
 			Log.d(LOG_TAG, "Start to save the bitmap.");
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		File floderPath = new File(cameraPath);
 		if(!floderPath.exists()){
 			floderPath.mkdirs();
 		}
-		String path = cameraPath + format.format(new Date())+".jpg";
+		String path = cameraPath + dateFormat.format(new Date())+".jpg";
 		try {
 			//if there is a sdcard
 			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
@@ -161,7 +168,10 @@ public class CameraActivity extends Activity {
 				if(!file.exists())
 					file.createNewFile();
 				FileOutputStream fos = new FileOutputStream(file);
-				fos.write(data);
+				Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+				bitmap = addWatermark(bitmap);
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+				fos.flush();
 				fos.close();
 				if (LOG_SWITCH)
 					Log.d(LOG_TAG, "Image captured successfully!");
@@ -178,7 +188,28 @@ public class CameraActivity extends Activity {
 		}
 		return path;
 	}
-
+	
+	private Bitmap addWatermark(Bitmap bmp){
+        int w = bmp.getWidth();
+        int h = bmp.getHeight();
+        String mstrTitle = dateFormat.format(new Date());
+//        String mstrTitle = locations;
+        Bitmap bmpTemp = Bitmap.createBitmap(w, h, Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmpTemp);
+        Paint p = new Paint();
+        String familyName = "ËÎÌå";
+        Typeface font = Typeface.create(familyName, Typeface.BOLD);
+        Log.i("TAG", "×ÖÌå");
+        p.setColor(Color.YELLOW);
+        p.setTypeface(font);
+        p.setTextSize(40);
+        canvas.drawBitmap(bmp, 0, 0, p);
+        canvas.drawText(mstrTitle, w -500, h-50, p);
+        canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.restore();
+        Log.i("TAG", "±£´æ");
+		return bmpTemp;
+	}
 	
 //	private void updateLastPhoto(String filePath) {
 //		long lastModified = 0;
