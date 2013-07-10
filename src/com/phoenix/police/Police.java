@@ -24,6 +24,10 @@ public class Police extends Activity implements View.OnClickListener{
     	startCamera.setOnClickListener(this);
     	ImageView startVideo = (ImageView) findViewById(R.id.video);
     	startVideo.setOnClickListener(this);
+    	ImageView startRecord = (ImageView) findViewById(R.id.record);
+    	startRecord.setOnClickListener(this);
+    	ImageView startFiles = (ImageView) findViewById(R.id.files);
+    	startFiles.setOnClickListener(this);
     }
 
     @Override
@@ -41,7 +45,12 @@ public class Police extends Activity implements View.OnClickListener{
 		case R.id.video:
 			startActivity(new Intent("com.phoenix.police.VideoActivity"));
 			break;
-		}
+		case R.id.record:
+			startActivity(new Intent("com.phoenix.police.AudioActivity"));
+			break;
+		case R.id.files:
+			startActivity(new Intent("com.phoenix.police.FilesActivity"));
+			break;
 	}
-    
+	}
 }

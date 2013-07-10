@@ -50,7 +50,7 @@ public class CameraActivity extends Activity {
 	private ToneGenerator tone;
 	private boolean cameraBusy = false;
 	private int cFlashMode = CameraSurfaceView.FLASH_MODE_AUTO;
-	private String cameraPath = "/sdcard/police/camera/";
+	private String cameraPath = Constants.CAMERA_PATH;
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	private AutoFocusCallback autoFocus = new AutoFocusCallback() {
@@ -68,7 +68,7 @@ public class CameraActivity extends Activity {
 		mySurface = new CameraSurfaceView(this);
 		RelativeLayout cameraLayout = ( RelativeLayout) findViewById(R.id.camera);
 		cameraLayout.setGravity(Gravity.CENTER);
-		mySurface.setLayoutParams(new LayoutParams(480, 640));
+		mySurface.setLayoutParams(new LayoutParams(648, 486));
 		cameraLayout.addView(mySurface);
 		ImageButton button = (ImageButton) findViewById(R.id.qiezi);
 		button.setOnClickListener(new OnClickListener() {
@@ -133,11 +133,11 @@ public class CameraActivity extends Activity {
 	//When the shutter is pressed ,onShutter() called.
 	private ShutterCallback shutterCallback = new ShutterCallback(){
 		public void onShutter() {
-			if(tone == null)
-				//发出提示用户的声音
-				tone = new ToneGenerator(AudioManager.STREAM_MUSIC,
-						ToneGenerator.MAX_VOLUME);
-			tone.startTone(ToneGenerator.TONE_PROP_BEEP2);
+//			if(tone == null)
+//				//发出提示用户的声音
+//				tone = new ToneGenerator(AudioManager.STREAM_MUSIC,
+//						ToneGenerator.MAX_VOLUME);
+//			tone.startTone(ToneGenerator.TONE_PROP_BEEP2);
 		}
 	};
 	

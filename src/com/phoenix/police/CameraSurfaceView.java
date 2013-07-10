@@ -150,7 +150,8 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
 					
 				}
 				// 设置拍照和预览图片大小
-				parameters.setPictureSize(2048, 1536); // 指定拍照图片的大小
+//				parameters.setPictureSize(2592, 1944); // 指定拍照图片的大小
+				parameters.setPictureSize(1024, 768);
 				parameters.setPreviewSize(640, 480); // 指定preview的大小
 				// 这两个属性 如果这两个属性设置的和真实手机的不一样时，就会报错
 

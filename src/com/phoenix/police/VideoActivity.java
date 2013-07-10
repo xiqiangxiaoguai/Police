@@ -1,34 +1,29 @@
 package com.phoenix.police;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.phoenix.data.Constants;
+
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.PixelFormat;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
-import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.Parameters;
-import android.hardware.Camera.PictureCallback;
-import android.hardware.Camera.ShutterCallback;
-import android.media.AudioManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.media.ThumbnailUtils;
 import android.media.ToneGenerator;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.StatFs;
+import android.provider.MediaStore.Video.Thumbnails;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -36,12 +31,10 @@ import android.widget.RelativeLayout;
 public class VideoActivity extends Activity {
 	/** Called when the activity is first created. */
 	CameraSurfaceView mySurface;
-	private ToneGenerator tone;
 	private boolean cameraBusy = false;
 	private int cFlashMode = CameraSurfaceView.FLASH_MODE_OFF;
-	private ImageView lastView;
-	private String videoPath = "/sdcard/police/video/";
 	public MediaRecorder mrec;
+	private String cPath = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,9 +61,30 @@ public class VideoActivity extends Activity {
 					mrec.stop();
 		            mrec.release();
 		            mrec = null;
+		            
+		            File myCaptureFile = new File( Constants.VIDEO_THUMBNAIL_PATH + cPath.substring(cPath.lastIndexOf('/'),cPath.lastIndexOf('.')) + ".jpg");
+					BufferedOutputStream bos;
+					try {
+						bos = new BufferedOutputStream(new FileOutputStream(
+								myCaptureFile));
+						ThumbnailUtils.createVideoThumbnail(cPath,
+								Thumbnails.MINI_KIND).compress(
+								Bitmap.CompressFormat.JPEG, 80, bos);
+						try {
+							bos.flush();
+							bos.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
+		
 		final ImageButton flashBtn = (ImageButton) findViewById(R.id.flashmode);
 		flashBtn.setBackgroundResource(R.drawable.ic_flash_off_holo_light);
 		flashBtn.setOnClickListener(new OnClickListener() {
@@ -98,12 +112,16 @@ public class VideoActivity extends Activity {
 	private void startRecording() throws IOException 
     {
 		mrec = new MediaRecorder();
-		File folderFile = new File(videoPath);
+		File folderFile = new File(Constants.VIDEO_PATH);
 		if(!folderFile.exists()){
 			folderFile.mkdirs();
 		}
+		File thumbnailFile = new File(Constants.VIDEO_THUMBNAIL_PATH);
+		if(!thumbnailFile.exists()){
+			thumbnailFile.mkdirs();
+		}
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String path = videoPath+format.format(new Date())+".3gp";
+		cPath = Constants.VIDEO_PATH + format.format(new Date())+".3gp";
 		
 		Camera mCamera = mySurface.getCamera();
 		SurfaceHolder surfaceHolder = mySurface.getHolder();
@@ -116,7 +134,7 @@ public class VideoActivity extends Activity {
 
         mrec.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
         mrec.setPreviewDisplay(surfaceHolder.getSurface());
-        mrec.setOutputFile(path); 
+        mrec.setOutputFile(cPath); 
 
         mrec.prepare();
         mrec.start();
