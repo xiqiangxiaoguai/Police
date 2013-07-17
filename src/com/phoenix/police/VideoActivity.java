@@ -127,11 +127,11 @@ public class VideoActivity extends Activity {
 		SurfaceHolder surfaceHolder = mySurface.getHolder();
         mrec = new MediaRecorder();  // Works well
         mCamera.unlock();
+        mrec.setOrientationHint(90);
         mrec.setCamera(mCamera);
         mrec.setPreviewDisplay(surfaceHolder.getSurface());
         mrec.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mrec.setAudioSource(MediaRecorder.AudioSource.MIC); 
-
         mrec.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
         mrec.setPreviewDisplay(surfaceHolder.getSurface());
         mrec.setOutputFile(cPath); 

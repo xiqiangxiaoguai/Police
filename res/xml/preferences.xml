@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/wireless2" >
+
+        
+        <SwitchPreference
+                android:key="setting_wifi_switch_preference"
+                android:title="@string/wifi">
+        </SwitchPreference>
+        <PreferenceScreen 
+            android:key="setting_wifi_preference"
+            android:title="@string/wifi_setting">
+            <PreferenceCategory 
+                android:title="@string/wifi" >
+   			 </PreferenceCategory>
+        </PreferenceScreen>
+        <SwitchPreference
+                android:key="setting_3g_switch_preference"
+                android:title="@string/threeg" />
+        
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/device" >
+
+        <PreferenceScreen
+            android:key="setting_storage_preference"
+            android:title="@string/storage">
+            <Preference />
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:key="setting_about_preference"
+            android:title="@string/about" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

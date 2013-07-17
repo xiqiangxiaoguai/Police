@@ -3,6 +3,7 @@ package com.phoenix.police;
 import com.phoenix.data.Account;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -28,6 +29,8 @@ public class Police extends Activity implements View.OnClickListener{
     	startRecord.setOnClickListener(this);
     	ImageView startFiles = (ImageView) findViewById(R.id.files);
     	startFiles.setOnClickListener(this);
+    	ImageView startSetting = (ImageView) findViewById(R.id.setting);
+    	startSetting.setOnClickListener(this);
     }
 
     @Override
@@ -50,6 +53,9 @@ public class Police extends Activity implements View.OnClickListener{
 			break;
 		case R.id.files:
 			startActivity(new Intent("com.phoenix.police.FilesActivity"));
+			break;
+		case R.id.setting:
+			startActivity(new Intent("com.phoenix.setting.SettingActivity"));
 			break;
 	}
 	}

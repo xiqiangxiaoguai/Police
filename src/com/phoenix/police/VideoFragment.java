@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -16,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -28,14 +32,14 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FakeBitmapDisplayer;
 import com.phoenix.data.Constants;
 
-public class VideoFragment extends Fragment{
+public class VideoFragment extends Fragment implements OnItemClickListener{
 
 	private static final boolean LOG_SWITCH = Constants.LOG_SWITCH;
 	private static final String LOG_TAG = VideoFragment.class.getSimpleName();
 	
 	ArrayList<String> imageNames = new ArrayList<String>();
 	ArrayList<String> imageUrls = new ArrayList<String>();
-	
+	ArrayList<String> videoUrls = new ArrayList<String>();
 	private Handler mHandler;
 	private ImageLoader imageloader;
 	
@@ -70,8 +74,13 @@ public class VideoFragment extends Fragment{
 			imageNames.add(files[i].getName());
 			imageUrls.add(files[i].getAbsolutePath());
 		}
-		
+		files = new File(Constants.VIDEO_PATH).listFiles();
+		for(int i=0; i <files.length; i++){
+			if(files[i].isFile())
+			videoUrls.add(files[i].getAbsolutePath());
+		}
 	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -79,6 +88,7 @@ public class VideoFragment extends Fragment{
 		View view = inflater.inflate(R.layout.camera_fragment, container,false);
 		GridView grid = (GridView) view.findViewById(R.id.images);
 		grid.setAdapter(new ImageAdapter(getActivity()));
+		grid.setOnItemClickListener(this);
 		return view;
 	}
 	@Override
@@ -140,6 +150,21 @@ public class VideoFragment extends Fragment{
 	            });
 			return imageView;
 		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
+//		Intent intent = new Intent(Intent.ACTION_VIEW);
+//		Uri uri = Uri.parse("file://" + videoUrls.get(pos));
+//		intent.setDataAndType(uri, "video/3gp");
+//		startActivity(intent);
 		
+		Intent intent = new Intent("com.phoenix.police.VideoPlayer");
+		Bundle bundle = new Bundle();
+		String cUrl = videoUrls.get(pos);
+		bundle.putString("url", cUrl);
+		bundle.putString("name", cUrl.substring(cUrl.lastIndexOf('/'), cUrl.lastIndexOf('.')));
+		intent.putExtras(bundle);
+		startActivity(intent);
 	}
 }

@@ -5,16 +5,20 @@ import java.util.ArrayList;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -25,7 +29,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.phoenix.data.Constants;
 
-public class CameraFragment extends Fragment{
+public class CameraFragment extends Fragment implements OnItemClickListener{
 
 	private static final boolean LOG_SWITCH = Constants.LOG_SWITCH;
 	private static final String LOG_TAG = CameraFragment.class.getSimpleName();
@@ -35,7 +39,13 @@ public class CameraFragment extends Fragment{
 	
 	private Handler mHandler;
 	private ImageLoader imageloader;
-	
+	private Handler handler = new Handler(){
+		public void handleMessage(Message msg) {
+			GridView grid = (GridView) getView().findViewById(R.id.images);
+			grid.setAdapter(new ImageAdapter(getActivity()));
+			grid.setOnItemClickListener(CameraFragment.this);
+		};
+	};
 	DisplayImageOptions options =  new DisplayImageOptions.Builder()
 	.resetViewBeforeLoading()
 	.showImageForEmptyUri(R.drawable.image_loading)
@@ -47,7 +57,7 @@ public class CameraFragment extends Fragment{
 		@Override
 		public void run() {
 			getImages();
-			mHandler.sendEmptyMessage(0);
+			handler.sendEmptyMessage(0);
 		}
 		
 	};
@@ -60,7 +70,7 @@ public class CameraFragment extends Fragment{
 		mHandler = new Handler(hThread.getLooper()){
 		};
 		imageloader = ImageLoader.getInstance();
-//		mHandler.post(run);
+		mHandler.post(run);
 	}
 	
 	private void getImages(){
@@ -69,27 +79,24 @@ public class CameraFragment extends Fragment{
 			imageNames.add(files[i].getName());
 			imageUrls.add(files[i].getAbsolutePath());
 		}
-		
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getImages();
+//		getImages();
 		View view = inflater.inflate(R.layout.camera_fragment, container,false);
-		GridView grid = (GridView) view.findViewById(R.id.images);
-		grid.setAdapter(new ImageAdapter(getActivity()));
+		
 		return view;
 	}
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mHandler.removeCallbacks(run);
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		imageloader.stop();
+		mHandler.removeCallbacks(run);
 	}
 	
 	class ImageAdapter extends BaseAdapter{
@@ -125,7 +132,7 @@ public class CameraFragment extends Fragment{
 			imageView.setMaxWidth(LayoutParams.MATCH_PARENT);
 			LayoutParams p = new LayoutParams(LayoutParams.MATCH_PARENT, 300);
 			imageView.setLayoutParams(p);
-				imageloader.displayImage("file:/" + imageUrls.get(arg0), imageView,options,new SimpleImageLoadingListener()  
+				imageloader.displayImage("file://" + imageUrls.get(arg0), imageView,options,new SimpleImageLoadingListener()  
 	            {  
 					@Override
 					public void onLoadingComplete(String imageUri, View view,
@@ -139,5 +146,15 @@ public class CameraFragment extends Fragment{
 			return imageView;
 		}
 		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
+		Intent intent = new Intent("com.phoenix.police.CameraBrowseActivity");
+		Bundle bundle = new Bundle();
+		bundle.putStringArrayList("cameraPaths", imageUrls);
+		bundle.putInt("currentPic", pos);
+		intent.putExtras(bundle);
+		startActivity(intent);
 	}
 }

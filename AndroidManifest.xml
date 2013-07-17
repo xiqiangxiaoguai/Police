@@ -14,6 +14,10 @@
 	<user-feature android:name="android.hardware.camera.autofocus" />
 	<uses-permission android:name="android.permission.FLASHLIGHT"/>
 	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
     <application
         android:name="com.phoenix.police.PoliceApplication"
         android:allowBackup="true"
@@ -54,6 +58,31 @@
             >
             <intent-filter >
                 <action android:name="com.phoenix.police.FilesActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data />
+            </intent-filter>
+        </activity>
+        <activity 
+            android:name=".CameraBrowseActivity"
+            >
+            <intent-filter >
+                <action android:name="com.phoenix.police.CameraBrowseActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data />
+            </intent-filter>
+        </activity>
+        <activity 
+            android:name=".VideoPlayer"
+            >
+            <intent-filter >
+                <action android:name="com.phoenix.police.VideoPlayer"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.phoenix.setting.SettingActivity">
+            <intent-filter >
+                <action android:name="com.phoenix.setting.SettingActivity"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data />
             </intent-filter>

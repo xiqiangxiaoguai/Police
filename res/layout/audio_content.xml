@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+	>
+	<ImageView 
+	    android:id="@+id/playstate"
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:src="@drawable/audio_play"/>
+	<TextView 
+	    android:id="@+id/audioname"
+	    android:layout_height="50dp"
+	    android:layout_width="wrap_content"
+	    android:textSize="36sp"
+	    />
+</LinearLayout>
