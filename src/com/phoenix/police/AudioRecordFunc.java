@@ -33,7 +33,7 @@ public class AudioRecordFunc {
     private boolean isRecord = false;// 设置正在录制的状态  
      
     private static final String audioPath = "police/audio/";
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
     private static AudioRecordFunc mInstance; 
           
     private AudioRecordFunc(){

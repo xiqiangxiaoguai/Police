@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import com.phoenix.data.Constants;
 
 public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 	
@@ -151,15 +152,15 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
 				}
 				// 设置拍照和预览图片大小
 //				parameters.setPictureSize(2592, 1944); // 指定拍照图片的大小
-				parameters.setPictureSize(1024, 768);
-				parameters.setPreviewSize(640, 480); // 指定preview的大小
+				parameters.setPictureSize(Constants.resolution_with_5, Constants.resolution_height_5);
+				parameters.setPreviewSize(Constants.resolution_with_2, Constants.resolution_height_2); // 指定preview的大小
 				// 这两个属性 如果这两个属性设置的和真实手机的不一样时，就会报错
 
 				// 横竖屏镜头自动调整
 				if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
 					parameters.set("orientation", "portrait"); //
-					parameters.set("rotation", 90); // 镜头角度转90度（默认摄像头是横拍）
-					myCamera.setDisplayOrientation(90); // 在2.2以上可以使用
+					parameters.set("rotation", 0); // 镜头角度转90度（默认摄像头是横拍）
+					myCamera.setDisplayOrientation(180); // 在2.2以上可以使用
 				} else// 如果是横屏
 				{
 					parameters.set("orientation", "landscape"); //

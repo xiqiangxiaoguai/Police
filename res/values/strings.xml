@@ -21,4 +21,17 @@
     <string name="threeg">3G</string>
     <string name="storage">存储</string>
     <string name="about">关于本机</string>
+    <string name="connected">已经连接</string>
+    <string name="storage_describe">存储(可用/全部)</string>
+    <string name="camera_file">照片</string>
+    <string name="video_file">视频</string>
+    <string name="audio_file">录音</string>
+    <string name="device_name">机器型号</string>
+    <string name="android_version">平台版本</string>
+    <string name="version">软件版本</string>
+    <string name="level">信号强度</string>
+    <string name="security">安全性</string>
+    <string name="password">密码</string>
+    <string name="connect">连接</string>
+    <string name="cancel">取消</string>
 </resources>

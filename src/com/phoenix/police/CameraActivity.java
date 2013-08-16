@@ -51,8 +51,8 @@ public class CameraActivity extends Activity {
 	private boolean cameraBusy = false;
 	private int cFlashMode = CameraSurfaceView.FLASH_MODE_AUTO;
 	private String cameraPath = Constants.CAMERA_PATH;
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	
+	private SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
 	private AutoFocusCallback autoFocus = new AutoFocusCallback() {
 		
 		@Override
@@ -68,7 +68,7 @@ public class CameraActivity extends Activity {
 		mySurface = new CameraSurfaceView(this);
 		RelativeLayout cameraLayout = ( RelativeLayout) findViewById(R.id.camera);
 		cameraLayout.setGravity(Gravity.CENTER);
-		mySurface.setLayoutParams(new LayoutParams(648, 486));
+		mySurface.setLayoutParams(new LayoutParams(640, 480));
 		cameraLayout.addView(mySurface);
 		ImageButton button = (ImageButton) findViewById(R.id.qiezi);
 		button.setOnClickListener(new OnClickListener() {
@@ -109,6 +109,7 @@ public class CameraActivity extends Activity {
 		});
 //		lastView = (ImageView) findViewById(R.id.lastphoto);
 //		updateLastPhoto(filePath);
+		setupButtonListener();
 	}
 	//返回照片的JPEG格式的数据
 	private PictureCallback jpegCallback = new PictureCallback(){
@@ -148,7 +149,7 @@ public class CameraActivity extends Activity {
 		if(!floderPath.exists()){
 			floderPath.mkdirs();
 		}
-		String path = cameraPath + dateFormat.format(new Date())+".jpg";
+		String path = cameraPath + dateFormat2.format(new Date())+".jpg";
 		try {
 			//if there is a sdcard
 			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
@@ -169,7 +170,7 @@ public class CameraActivity extends Activity {
 					file.createNewFile();
 				FileOutputStream fos = new FileOutputStream(file);
 				Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-				bitmap = addWatermark(bitmap);
+//				bitmap = addWatermark(bitmap);
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 				fos.flush();
 				fos.close();
@@ -192,7 +193,7 @@ public class CameraActivity extends Activity {
 	private Bitmap addWatermark(Bitmap bmp){
         int w = bmp.getWidth();
         int h = bmp.getHeight();
-        String mstrTitle = dateFormat.format(new Date());
+        String mstrTitle = dateFormat1.format(new Date());
 //        String mstrTitle = locations;
         Bitmap bmpTemp = Bitmap.createBitmap(w, h, Config.ARGB_8888);
         Canvas canvas = new Canvas(bmpTemp);
@@ -211,19 +212,13 @@ public class CameraActivity extends Activity {
 		return bmpTemp;
 	}
 	
-//	private void updateLastPhoto(String filePath) {
-//		long lastModified = 0;
-//		String lastPath = null ;
-//		File root = new File(filePath);
-//		File[] files = root.listFiles();
-//		for (File file : files) {
-//			if(file.lastModified() > lastModified){
-//				lastModified = file.lastModified();
-//				lastPath = file.getAbsolutePath();
-//			}
-//		}
-//		if(lastPath != null){
-//			lastView.setImageURI(Uri.fromFile(new File(lastPath)));
-//		}
-//	}
+	private void setupButtonListener(){
+		ImageButton backButton = (ImageButton) findViewById(R.id.back);
+		backButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				finish();
+			}
+		});
+	}
 }

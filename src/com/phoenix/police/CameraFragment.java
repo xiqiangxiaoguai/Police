@@ -75,6 +75,8 @@ public class CameraFragment extends Fragment implements OnItemClickListener{
 	
 	private void getImages(){
 		File[] files = new File(Constants.CAMERA_PATH).listFiles();
+//		if(null == files)
+//			return ;
 		for(int i=0; i <files.length; i++){
 			imageNames.add(files[i].getName());
 			imageUrls.add(files[i].getAbsolutePath());

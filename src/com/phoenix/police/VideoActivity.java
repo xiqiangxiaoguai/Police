@@ -120,7 +120,7 @@ public class VideoActivity extends Activity {
 		if(!thumbnailFile.exists()){
 			thumbnailFile.mkdirs();
 		}
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
 		cPath = Constants.VIDEO_PATH + format.format(new Date())+".3gp";
 		
 		Camera mCamera = mySurface.getCamera();

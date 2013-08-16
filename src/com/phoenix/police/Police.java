@@ -1,6 +1,10 @@
 package com.phoenix.police;
 
+import java.io.File;
+import java.lang.reflect.Method;
+
 import com.phoenix.data.Account;
+import com.phoenix.data.Constants;
 
 import android.os.Bundle;
 import android.provider.Settings;
@@ -19,7 +23,35 @@ public class Police extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_police);
         getContentResolver().query(Account.CONTENT_URI, null, null, null, null);
         setupButtonListener();
+        
+        for(String str : new String[]{Constants.CAMERA_PATH, Constants.AUDIO_PATH, Constants.VIDEO_PATH})
+        {
+        	File floderPath = new File(str);
+        	if(!floderPath.exists()){
+        		floderPath.mkdirs();
+        	}
+        }
+        
     }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+    	// TODO Auto-generated method stub  
+        System.out.println("hasfocus--->>>" + hasFocus);  
+        super.onWindowFocusChanged(hasFocus);  
+        try  
+        {  
+            Object service = getSystemService("statusbar");  
+            Class<?> statusbarManager =  
+                    Class.forName("android.app.StatusBarManager");  
+            Method test = statusbarManager.getMethod("collapse");  
+            test.invoke(service);  
+        }  
+        catch (Exception ex)  
+        {  
+            ex.printStackTrace();  
+        }  
+    }
+    
     private void setupButtonListener(){
     	ImageView startCamera = (ImageView) findViewById(R.id.camera);
     	startCamera.setOnClickListener(this);
